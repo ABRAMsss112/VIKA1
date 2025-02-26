@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>З Днем Народження!</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Щоб конфеті не виходили за межі екрану */
+        }
+
+        #birthdayMessage {
+            font-size: 2.5em;
+            color: #ff69b4;
+            display: none;
+            animation: pulse 1.5s infinite, glow 2s infinite alternate;
+            text-align: center;
+        }
+
+        #birthdayImage {
+            max-width: 90%;
+            height: 400px;
+            margin-top: 20px;
+            animation: pulse 1.5s infinite, glow 2s infinite alternate;
+            display: none;
+            border-radius: 15px; /* Додаємо закруглені кути для фото */
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes glow {
+            0% { filter: drop-shadow(0 0 5px #ff69b4); }
+            100% { filter: drop-shadow(0 0 20px #ff1493); }
+        }
+
+        #confetti {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ff69b4;
+            animation: confetti-fall 5s linear forwards;
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.8); /* Світіння */
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; } /* Зникнення */
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            color: white;
+            background-color: #ff69b4;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff1493;
+        }
+
+        @media (max-width: 600px) {
+            #birthdayMessage {
+                font-size: 2em;
+            }
+
+            #birthdayImage {
+                height: 300px; /* Зменшуємо висоту фото для мобільних пристроїв */
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 400px) {
+            #birthdayMessage {
+                font-size: 1.5em;
+            }
+
+            #birthdayImage {
+                height: 250px; /* Ще менше для дуже малих екранів */
+            }
+        }
+    </style>
+</head>
+<body>
+    <button id="birthdayButton" onclick="showBirthdayMessage()">Натисни мене!</button>
+    <div id="birthdayMessage">З Днем Народження! 🎉</div>
+    <img id="birthdayImage" src="birthday_photo.jpg" alt="Birthday Image" style="display: none;">
+    <div id="confetti"></div>
+
+    <audio id="birthdayMusic" src="birthday_music.mp3" preload="auto"></audio>
+
+    <script>
+        let confettiInterval; // Інтервал для створення конфеті
+
+        function showBirthdayMessage() {
+            // Приховуємо кнопку
+            document.getElementById('birthdayButton').style.display = 'none';
+
+            // Показуємо повідомлення та фото
+            document.getElementById('birthdayMessage').style.display = 'block';
+            document.getElementById('birthdayImage').style.display = 'block';
+
+            // Включаємо музику
+            document.getElementById('birthdayMusic').play();
+
+            // Запускаємо безперервне створення конфеті
+            confettiInterval = setInterval(createConfetti, 100); // Нова конфеті кожні 100 мс
+        }
+
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti-piece';
+
+            // Випадковий колір
+            const colors = ['#ff69b4', '#ff1493', '#00ffff', '#ffcc00', '#ff4500'];
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+            // Випадкова позиція та тривалість анімації
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+
+            // Випадковий розмір
+            const size = Math.random() * 10 + 5; // Розмір від 5px до 15px
+            confetti.style.width = size + 'px';
+            confetti.style.height = size + 'px';
+
+            // Додаємо світіння
+            confetti.style.boxShadow = `0 0 10px ${confetti.style.backgroundColor}`;
+
+            document.getElementById('confetti').appendChild(confetti);
+
+            // Видаляємо конфеті після завершення анімації
+            setTimeout(() => {
+                confetti.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
